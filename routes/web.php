@@ -25,3 +25,19 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function(){
     Route::get('{provider}', 'Auth\OAuthController@redirectToProvider')->name('provider');
     Route::get('{provider}/callback', 'Auth\OAuthController@handleProviderCallback')->name('provider.callback');
 });
+
+Route::get('dev', function () {
+    return view('dashboard.content');
+});
+
+Route::get('dev2', function () {
+    return view('dashboard.content.users.index');
+});
+
+Route::group(['prefix' => 'home',  'middleware' => ['auth'], 'as' => 'dashboard.'], function(){
+    Route::get('/', 'Dashboard\HomeController@index')->name('index');
+
+    Route::group(['prefix' => 'user',  'middleware' => ['auth'], 'as' => 'user.'], function(){
+        Route::resource('/', 'Dashboard\UserController');
+    });
+});
