@@ -8,28 +8,46 @@
         </div>
         <ul class="nav navbar-nav align-items-center ml-auto">
             <li class="nav-item dropdown dropdown-user">
-                @auth
-                <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="user-nav d-sm-flex d-none">
-                        <span class="user-name font-weight-bolder">{{ Auth::user()->name }}</span>
-                        <span class="user-status">{{ Auth::user()->roles[0]->name }}</span>
+                @guest
+                    <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none">
+                            <span class="user-name font-weight-bolder">Belum Login</span>
+                            <span class="user-status">Belum Login</span>
+                        </div>
+                        <span class="avatar">
+                            <img class="round" src="{{ asset('dashboard') }}/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40">
+                            <span class="avatar-status-online"></span>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href="{{ route('login') }}" >
+                            <i class="mr-50" data-feather="power"></i>
+                            Login
+                        </a>
                     </div>
-                    <span class="avatar">
-                        <img class="round" src="{{ asset('dashboard') }}/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40">
-                        <span class="avatar-status-online"></span>
-                    </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                    <a class="dropdown-item" href="page-profile.html">
-                        <i class="mr-50" data-feather="user"></i>
-                        Profile
+                @else
+                    <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none">
+                            <span class="user-name font-weight-bolder">{{ Auth::user()->name }}</span>
+                            <span class="user-status">{{ Auth::user()->roles[0]->name }}</span>
+                        </div>
+                        <span class="avatar">
+                            <img class="round" src="{{ asset('dashboard') }}/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40">
+                            <span class="avatar-status-online"></span>
+                        </span>
                     </a>
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="mr-50" data-feather="power"></i>
-                        Logout
-                    </a>
-                </div>
-                @endauth
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href="page-profile.html">
+                            <i class="mr-50" data-feather="user"></i>
+                            Profile
+                        </a>
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="mr-50" data-feather="power"></i>
+                            Logout
+                        </a>
+                    </div>
+
+                @endguest
             </li>
         </ul>
     </div>
