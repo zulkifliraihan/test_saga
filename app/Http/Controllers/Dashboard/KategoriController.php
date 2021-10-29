@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
 
-class UserController extends Controller
+class KategoriController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,26 +18,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::with('roles')->orderBy('id', 'asc');
+        $kategori = Category::with('artikel');
         if (request()->ajax()) {
-            return DataTables::of($user)
+            return DataTables::of($kategori)
             ->addColumn('DT_RowIndex', function() {
                 $i = 1;
                 return $i++;
             })
-            ->addColumn('name_provider', function ($query){
-                if ($query->provider != null) {
-                    return ucwords($query->provider);
-                }
-                else {
-                    return "Daftar Manual";
-                }
-            })
-            ->addColumn('roles', function ($query){
-                return $query->roles['0']->name;
-            })
             ->addColumn('action', function ($action){
-                $button_delete = '<a href="javascript:void(0)" class="item-edit delete-user" id="'. $action->id .'">
+                $button_delete = '<a href="javascript:void(0)" class="delete-item" id="'. $action->id .'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 mr-50 font-small-4">
                         <polyline points="3 6 5 6 21 6"></polyline>
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -48,7 +35,7 @@ class UserController extends Controller
                     </svg>
                 </a>';
 
-                $button_edit = '<a href="'. route('dashboard.user.edit', $action->id ) .'" class="item-edit">
+                $button_edit = '<a href="javascript:void(0)" class="edit-item" id="'. $action->id .'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit font-small-4">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -61,7 +48,8 @@ class UserController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('dashboard.content.users.index');
+
+        return view('dashboard.content.kategori.index');
     }
 
     /**
@@ -71,9 +59,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
-
-        return view('dashboard.content.users.create', compact('roles'));
+        //
     }
 
     /**
@@ -86,19 +72,11 @@ class UserController extends Controller
     {
         // Start : Validation
         $rules = [
-           'name' => 'required',
-           'email' => 'required|unique:users,email',
-           'role' => 'required',
-           'password' => 'required|min:8',
+           'name' => 'required'
        ];
 
        $messages = [
-           'name.required' => 'Nama lengkap wajib di isi!',
-           'email.required' => 'Email wajib di isi!',
-           'email.unique' => 'Email Anda Sudah Terdaftar!',
-           'role.required' => 'Pilih Role terlebih dahuku!',
-           'password.required' => 'Password wajib di isi!',
-           'password.min' => 'Password minimal 8 karakter!',
+           'name.required' => 'Nama wajib di isi!'
        ];
 
        $validator = Validator::make($request->all(), $rules, $messages);
@@ -109,26 +87,22 @@ class UserController extends Controller
                'message' => $validator->errors()->first()
            ], 400);
        }
-
        // End : Validation
 
-       // Start : Store User
-       $data = [
-           'name' => $request->name,
-           'email' => $request->email,
-           'password' => Hash::make($request->password)
-       ];
+        // Start : Store Kategori
+        $data = [
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ];
 
-       $user = User::firstOrCreate($data);
-       $user->assignRole($request->role);
+        $category = Category::create($data);
 
-       return response()->json([
-           'status' => 'ok',
-           'response' => 'create-user',
-           'message' => 'User berhasil dibuat!',
-           'route' => route('dashboard.user.index')
-       ], 200);
-   }
+        return response()->json([
+            'status' => 'ok',
+            'response' => 'created-successfully',
+            'message' => 'Kategori artikel berhasil dibuat!'
+        ], 200);
+    }
 
     /**
      * Display the specified resource.
@@ -149,14 +123,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        $roles = Role::all();
-        $data = [
-            'user' => $user,
-            'roles' => $roles
-        ];
+        $category = Category::find($id);
 
-        return view('dashboard.content.users.edit', $data);
+        return $category;
     }
 
     /**
@@ -168,59 +137,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-
         // Start : Validation
         $rules = [
-            'name' => 'required',
-            'email' => 'required',
-            'role' => 'required',
-            'password' => 'required|min:8',
+            'name' => 'required'
         ];
 
         $messages = [
-            'name.required' => 'Nama lengkap wajib di isi!',
-            'email.required' => 'Email wajib di isi!',
-            'role.required' => 'Pilih Role terlebih dahuku!',
-            'password.required' => 'Password wajib di isi!',
-            'password.min' => 'Password minimal 8 karakter!',
+            'name.required' => 'Nama wajib di isi!'
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'fail-validator',
                 'message' => $validator->errors()->first()
             ], 400);
         }
-
-        if ($user->email != $request->email) {
-            $cek_user_email = User::where('email', $request->email)->count();
-            if ($cek_user_email == 1) {
-                return response()->json([
-                    'status' => 'fail-email',
-                    'message' => 'Email sudah terdaftar pada sistem!'
-                ], 400);
-            }
-        }
         // End : Validation
 
         $data = [
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->pasword)
+            'slug' => Str::slug($request->name),
         ];
 
-        $user->update($data);
-        $delete_role_user = DB::table('model_has_roles')->where('model_id',$id)->delete();
-        $user->assignRole($request->role);
+        $category = Category::find($id);
+        $category->update($data);
 
         return response()->json([
             'status' => 'ok',
-            'response' => 'update-user',
-            'message' => 'User berhasil diupdate data!',
-            'route' => route('dashboard.user.index')
+            'response' => 'edited-successfully',
+            'message' => 'Kategori artikel berhasil diedit!'
         ], 200);
+
     }
 
     /**
@@ -231,14 +180,14 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $user->delete();
-        $delete_role_user = DB::table('model_has_roles')->where('model_id',$id)->delete();
+        $category = Category::find($id);
+        $category->delete();
 
         return response()->json([
             'status' => 'ok',
-            'response' => 'delete-user',
-            'message' => 'User berhasil dihapus!'
+            'response' => 'deleted-successfully',
+            'message' => 'Kategori artikel berhasil dihapus!'
         ], 200);
+
     }
 }

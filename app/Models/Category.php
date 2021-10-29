@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Articel extends Model
+class Category extends Model
 {
     use HasFactory;
 
-    protected $table = 'articels';
+    protected $table = 'categories';
 
     /**
      * The attributes that are mass assignable.
@@ -17,16 +17,12 @@ class Articel extends Model
      * @var string[]
      */
     protected $fillable = [
-        'category_id',
-        'title',
-        'slug',
-        'content',
-        'banner',
+        'name',
+        'slug'
     ];
 
-    public function category()
+    public function artikel()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+        return $this->hasMany(Category::class, 'id', 'category_id');
     }
-
 }

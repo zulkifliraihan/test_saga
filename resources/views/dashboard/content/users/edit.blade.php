@@ -30,7 +30,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">
-                                Edit User Bernama <i>"{{ $user->name }}"</i>
+                                Edit User
                             </h4>
                         </div>
                         <div class="card-body">
