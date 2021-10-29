@@ -51,7 +51,7 @@
                     </li>
                 </ul>
             </li>
-            @endrole
+            @elserole('author')
             <li class=" nav-item"><a class="d-flex align-items-center" href="#">
                 <i data-feather="file-text"></i>
                 <span class="menu-title text-truncate" data-i18n="Artikel">Artikel</span></a>
@@ -70,6 +70,7 @@
                     </li>
                 </ul>
             </li>
+            @endrole
         </ul>
     </div>
 </div>

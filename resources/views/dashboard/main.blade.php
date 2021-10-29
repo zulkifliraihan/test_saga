@@ -37,6 +37,7 @@
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/pages/page-blog.css">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->

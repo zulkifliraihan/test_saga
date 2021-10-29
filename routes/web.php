@@ -14,13 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('kategori/{kategori}', 'HomeController@kategori')->name('landing.kategori');
+Route::get('kategori/{kategori}/detail/{slug}', 'HomeController@detail')->name('landing.detail');
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function(){
     Route::get('{provider}', 'Auth\OAuthController@redirectToProvider')->name('provider');
@@ -28,7 +31,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function(){
 });
 
 Route::get('dev', function () {
-    return view('dashboard.content');
+    return view('dashboard.content.primary.detail');
 });
 
 Route::get('dev2', function () {
