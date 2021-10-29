@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/vendors/css/extensions/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/app-assets/vendors/css/forms/select/select2.min.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -36,9 +37,6 @@
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/pages/dashboard-ecommerce.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/plugins/charts/chart-apex.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard') }}/app-assets/css/plugins/extensions/ext-component-toastr.css">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -46,6 +44,9 @@
     <!-- END: Custom CSS-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    @yield('custom_css')
+
 </head>
 <!-- END: Head-->
 
@@ -76,6 +77,7 @@
     <script src="{{ asset('dashboard') }}/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
     <script src="{{ asset('dashboard') }}/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js"></script>
     <script src="{{ asset('dashboard') }}/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="{{ asset('dashboard/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -86,7 +88,10 @@
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('dashboard') }}/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>
     <script src="{{ asset('dashboard') }}/app-assets/js/scripts/extensions/ext-component-sweet-alerts.js"></script>
+    <script src="{{ asset('dashboard/app-assets/js/scripts/forms/form-select2.js') }}"></script>
     <!-- END: Page JS-->
+
+    @yield('custom_js')
 
     <script>
         $(window).on('load', function() {

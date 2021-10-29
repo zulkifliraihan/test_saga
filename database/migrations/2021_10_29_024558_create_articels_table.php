@@ -16,6 +16,7 @@ class CreateArticelsTable extends Migration
         Schema::create('articels', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('category_id');
+            $table->integer('file_id');
             $table->string('title');
             $table->string('slug');
             $table->text('content');

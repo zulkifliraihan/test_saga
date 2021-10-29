@@ -18,14 +18,12 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Kategori Artikel</h2>
+                            <h2 class="content-header-title float-left mb-0">Artikel</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Artikel</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">Kategori Artikel
+                                    <li class="breadcrumb-item active">Artikel
                                     </li>
                                 </ol>
                             </div>
@@ -39,7 +37,7 @@
                                 <i data-feather="plus"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#createModalForm">
+                                <a class="dropdown-item" href="{{ route('dashboard.artikel.create') }}" >
                                     <i class="mr-1" data-feather="users"></i>
                                     <span class="align-middle">Tambah Baru</span>
                                 </a>
@@ -55,7 +53,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom">
-                                    <h4 class="card-title">Management Kategori Artikel</h4>
+                                    <h4 class="card-title">Management Artikel</h4>
                                 </div>
                                 <hr class="my-0" />
                                 <div class="card-datatable datatable-user-view">
@@ -63,8 +61,8 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Slug</th>
+                                                <th>Kategori</th>
+                                                <th>Title</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -82,20 +80,19 @@
     </div>
     <!-- END: Content-->
 
-    @include('dashboard.content.kategori.create')
-    @include('dashboard.content.kategori.edit')
+
     <script>
         $(document).ready(function(){
             let table = $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                        url: "{{ route('dashboard.kategori.index') }}",
+                        url: "{{ route('dashboard.artikel.index') }}",
                 },
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', className : "text-center width-100"},
-                    {data: 'name', name: 'name'},
-                    {data: 'slug', name: 'slug'},
+                    {data: 'category_name', name: 'category_name'},
+                    {data: 'title', name: 'title'},
                     {data: 'action', name: 'action', orderable: false, searchable: false, className : "text-center width-100"},
                 ]
             });

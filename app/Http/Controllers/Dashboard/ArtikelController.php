@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Articel;
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Str;
 
-class KategoriController extends Controller
+class ArtikelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,12 +18,16 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = Category::with('artikel');
+        $artikel = Articel::with('category', 'file');
+
         if (request()->ajax()) {
-            return DataTables::of($kategori)
+            return DataTables::of($artikel)
             ->addColumn('DT_RowIndex', function() {
                 $i = 1;
                 return $i++;
+            })
+            ->addColumn('category_name', function($query) {
+                return $query->category->name;
             })
             ->addColumn('action', function ($action){
                 $button_delete = '<a href="javascript:void(0)" class="delete-item" id="'. $action->id .'">
@@ -44,12 +48,12 @@ class KategoriController extends Controller
 
                 return $button_delete . $button_edit;
             })
-            ->rawColumns(['DT_RowIndex','action'])
+            ->rawColumns(['DT_RowIndex', 'category_name','action'])
             ->addIndexColumn()
             ->make(true);
         }
 
-        return view('dashboard.content.kategori.index');
+        return view('dashboard.content.artikel.index');
     }
 
     /**
@@ -59,7 +63,13 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        $kategori = Category::all();
+
+        $data = [
+            'kategori' => $kategori
+        ];
+
+        return view('dashboard.content.artikel.create', $data);
     }
 
     /**
@@ -72,36 +82,25 @@ class KategoriController extends Controller
     {
         // Start : Validation
         $rules = [
-           'name' => 'required'
-       ];
-
-       $messages = [
-           'name.required' => 'Nama wajib di isi!'
-       ];
-
-       $validator = Validator::make($request->all(), $rules, $messages);
-
-       if ($validator->fails()) {
-           return response()->json([
-               'status' => 'fail-validator',
-               'message' => $validator->errors()->first()
-           ], 400);
-       }
-       // End : Validation
-
-        // Start : Store Kategori
-        $data = [
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
+            'title' => 'required',
+            'content' => 'required',
+            'banner' => 'required',
         ];
 
-        $category = Category::create($data);
+        $messages = [
+            'nama.required' => 'Nama layanan wajib di isi !',
+            'deskripsi_singkat.required' => 'Deskripsi singkat wajib di isi !',
+            'deskripsi_layanan.required' => 'Deskripsi layanan wajib di isi !',
+        ];
 
-        return response()->json([
-            'status' => 'ok',
-            'response' => 'created-successfully',
-            'message' => 'Kategori artikel berhasil dibuat!'
-        ], 200);
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'fail-validator',
+                'message' => $validator->errors()->first()
+            ], 400);
+        }
+        // End : Validation
     }
 
     /**
@@ -123,9 +122,7 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
-
-        return $category;
+        //
     }
 
     /**
@@ -137,39 +134,7 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Start : Validation
-        $rules = [
-            'name' => 'required'
-        ];
-
-        $messages = [
-            'name.required' => 'Nama wajib di isi!'
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'fail-validator',
-                'message' => $validator->errors()->first()
-            ], 400);
-        }
-        // End : Validation
-
-        $data = [
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-        ];
-
-        $category = Category::find($id);
-        $category->update($data);
-
-        return response()->json([
-            'status' => 'ok',
-            'response' => 'edited-successfully',
-            'message' => 'Kategori artikel berhasil diedit!'
-        ], 200);
-
+        //
     }
 
     /**
@@ -180,14 +145,6 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        $category->delete();
-
-        return response()->json([
-            'status' => 'ok',
-            'response' => 'deleted-successfully',
-            'message' => 'Kategori artikel berhasil dihapus!'
-        ], 200);
-
+        //
     }
 }

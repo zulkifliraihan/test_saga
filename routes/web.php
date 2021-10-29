@@ -38,8 +38,11 @@ Route::get('dev2', function () {
 Route::group(['prefix' => 'home',  'middleware' => ['auth'], 'as' => 'dashboard.'], function(){
     Route::get('/', 'Dashboard\HomeController@index')->name('index');
 
-    Route::resource('user', 'Dashboard\UserController');
+    Route::group(['middleware' => ['role:admin']], function(){
+        Route::resource('user', 'Dashboard\UserController');
+    });
 
     Route::resource('kategori', 'Dashboard\KategoriController');
 
+    Route::resource('artikel', 'Dashboard\ArtikelController');
 });

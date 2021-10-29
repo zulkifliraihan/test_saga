@@ -18,6 +18,7 @@ class Articel extends Model
      */
     protected $fillable = [
         'category_id',
+        'file_id',
         'title',
         'slug',
         'content',
@@ -27,6 +28,11 @@ class Articel extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function file()
+    {
+        return $this->hasOne(File::class, 'file_id', 'id');
     }
 
 }

@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="d-flex align-items-center" href="page-profile.html">
+                        <a class="d-flex align-items-center" href="{{ route('dashboard.artikel.index') }}">
                             <i data-feather="circle"></i>
                             <span class="menu-item text-truncate" data-i18n="Konten Artikel">Konten Artikel</span>
                         </a>
