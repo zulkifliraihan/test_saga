@@ -19,7 +19,6 @@ class CreateFilesTable extends Migration
             $table->string('address');
             $table->text('path');
             $table->string('folder');
-            $table->string('token');
             $table->tinyInteger('created_by');
             $table->tinyInteger('updated_by');
             $table->timestamps();

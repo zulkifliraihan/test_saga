@@ -16,13 +16,14 @@ class Articel extends Model
      *
      * @var string[]
      */
+
     protected $fillable = [
         'category_id',
-        'file_id',
+        'banner_ori',
+        'banner_resize',
         'title',
         'slug',
         'content',
-        'banner',
     ];
 
     public function category()
@@ -30,9 +31,14 @@ class Articel extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function file()
+    public function fileResize()
     {
-        return $this->hasOne(File::class, 'file_id', 'id');
+        return $this->hasOne(File::class, 'id', 'banner_resize');
+    }
+
+    public function fileOri()
+    {
+        return $this->hasOne(File::class, 'id', 'banner_ori');
     }
 
 }

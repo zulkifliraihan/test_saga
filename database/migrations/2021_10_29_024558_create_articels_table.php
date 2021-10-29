@@ -16,11 +16,11 @@ class CreateArticelsTable extends Migration
         Schema::create('articels', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('category_id');
-            $table->integer('file_id');
+            $table->integer('banner_ori');
+            $table->integer('banner_resize');
             $table->string('title');
             $table->string('slug');
             $table->text('content');
-            $table->text('banner');
             $table->timestamps();
         });
     }

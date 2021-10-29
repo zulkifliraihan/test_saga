@@ -48,12 +48,12 @@
                                     <div class="col-12">
                                         <div class="form-group row">
                                             <div class="col-sm-3 col-form-label">
-                                                <label for="vendor">Pilih Kategori Artikel
+                                                <label for="category_id">Pilih Kategori Artikel
                                                     <span style="color: red">*</span>
                                                 </label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <select class="select2 form-control ">
+                                                <select class="select2 form-control" name="category_id" id="category_id">
                                                     <option disabled selected>Silahkan Pilih</option>
                                                     @foreach ($kategori as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -133,12 +133,12 @@
                                     <div class="col-12">
                                         <div class="form-group row">
                                             <div class="col-sm-3 col-form-label">
-                                                <label for="banner">Banner Content
+                                                <label for="image">Banner Content
                                                     <span style="color: red">*</span>
                                                 </label>
                                             </div>
                                             <div class="col-sm-9">
-                                                <input type="file" class="dropify" name="banner" id="banner" />
+                                                <input type="file" class="dropify" name="image" id="image" />
                                             </div>
                                         </div>
                                     </div>
