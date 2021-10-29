@@ -110,7 +110,6 @@
         $(document).on('click', '.delete-user', function(){
 
             var user_id = $(this).attr("id");
-            console.log(user_id);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -139,7 +138,7 @@
                     Swal.showLoading();
                     $.ajax({
                         type:'DELETE',
-                        url: "{{url('superdashboard/admin/users')}}/" + user_id,
+                        url: "{{url('home/users/delete')}}/" + user_id,
                         success:function(data)
                         {
                             if(data.status == "ok"){
@@ -151,7 +150,7 @@
                                 });
                                 setTimeout(function() {
                                     Swal.close();
-                                    table.draw(false);
+                                    location.reload();
                                 }, 1500);
                             }
                         },

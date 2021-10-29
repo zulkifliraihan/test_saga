@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,7 +38,11 @@ Route::get('dev2', function () {
 Route::group(['prefix' => 'home',  'middleware' => ['auth'], 'as' => 'dashboard.'], function(){
     Route::get('/', 'Dashboard\HomeController@index')->name('index');
 
-    Route::group(['prefix' => 'user',  'middleware' => ['auth'], 'as' => 'user.'], function(){
+    Route::group(['prefix' => 'users',  'middleware' => ['auth'], 'as' => 'user.'], function(){
+        Route::get('{id}/edit', 'Dashboard\UserController@edit')->name('edit');
+        Route::patch('{id}', 'Dashboard\UserController@update')->name('update');
+        Route::delete('delete/{id}', 'Dashboard\UserController@destroy')->name('destroy');
+        // route('dashboard.')
         Route::resource('/', 'Dashboard\UserController');
     });
 });
